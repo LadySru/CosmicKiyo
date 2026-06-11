@@ -8,27 +8,6 @@ export interface InstagramPost {
   timestamp: string;
 }
 
-export interface InstagramResponse {
-  posts?: InstagramPost[];
-  error?: string;
-  message?: string;
-}
-
-export interface SteamGame {
-  appid: number;
-  name: string;
-  playtime_2weeks?: number;
-  playtime_forever: number;
-  img_icon_url: string;
-  img_logo_url?: string;
-}
-
-export interface SteamResponse {
-  recentGames: SteamGame[];
-  screenshots: string[];
-  error?: string;
-}
-
 export interface AnimeEntry {
   mal_id: number;
   title: string;
@@ -36,31 +15,50 @@ export interface AnimeEntry {
   episodes: number | null;
   watched_episodes: number;
   score: number | null;
+  genres: string[];
   status: 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
 }
 
-export interface MalResponse {
-  watching: AnimeEntry[];
-  favorites: AnimeEntry[];
-  error?: string;
+export interface SteamGame {
+  appid: number;
+  name: string;
+  playtime_2weeks?: number;
+  playtime_forever: number;
+  img_icon_url?: string;
+  img_logo_url?: string;
 }
 
-export interface DramaEntry {
-  id: number;
+export interface SteamScreenshot {
+  publishedfileid: string;
+  preview_url: string;
+  url?: string;
+  title?: string;
+}
+
+export interface DraamaShow {
+  id: number | string;
   title: string;
-  image_url: string;
+  image_url?: string;
   episodes: number | null;
   watched_episodes: number;
   score: number | null;
-  status: 'watching' | 'completed' | 'on_hold' | 'dropped' | 'plan_to_watch';
+  status: 'watching' | 'completed' | 'plan_to_watch' | 'on_hold' | 'dropped';
   country?: string;
+  year?: number;
+}
+
+export interface MALResponse {
+  watching: AnimeEntry[];
+  favorites: AnimeEntry[];
+}
+
+export interface SteamResponse {
+  recentGames: SteamGame[];
+  screenshots: SteamScreenshot[];
 }
 
 export interface DramaResponse {
-  watching: DramaEntry[];
-  favorites: DramaEntry[];
+  watching: DraamaShow[];
+  completed: DraamaShow[];
   error?: string;
-  message?: string;
 }
-
-export type TabId = 'cosplays' | 'anime' | 'games' | 'shows';

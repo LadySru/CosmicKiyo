@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "character": "Sailor Moon",
+    "series": "Sailor Moon",
+    "emoji": "🌙",
+    "bgColor": "#fff0f8",
+    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
+    "isFave": true
+  },
+  {
+    "id": "2",
+    "character": "Zero Two",
+    "series": "Darling in the FranXX",
+    "emoji": "💘",
+    "bgColor": "#fff5f5",
+    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
+    "isFave": true
+  },
+  {
+    "id": "3",
+    "character": "Miku Nakano",
+    "series": "The Quintessential Quintuplets",
+    "emoji": "🎧",
+    "bgColor": "#f0f4ff",
+    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
+    "isFave": false
+  },
+  {
+    "id": "4",
+    "character": "Tohru Honda",
+    "series": "Fruits Basket",
+    "emoji": "🍙",
+    "bgColor": "#f5fff0",
+    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
+    "isFave": false
+  }
+]
