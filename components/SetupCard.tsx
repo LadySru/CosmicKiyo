@@ -1,35 +1,23 @@
 interface Step {
-  text: React.ReactNode;
+  text: string;
 }
 
 interface SetupCardProps {
   icon: string;
-  platform?: string;
-  title?: string;
-  subtitle?: string;
-  description?: string;
+  title: string;
+  description: string;
   steps: Step[];
 }
 
-export default function SetupCard({ icon, platform, title, subtitle, description, steps }: SetupCardProps) {
-  const displayTitle = platform ?? title ?? '';
-  const displaySubtitle = subtitle ?? description ?? '';
-
+export default function SetupCard({ icon, title, description, steps }: SetupCardProps) {
   return (
     <div className="setup-card">
-      <div className="setup-card-header">
-        <span className="setup-card-icon">{icon}</span>
-        <div>
-          <div className="setup-card-title">{displayTitle}</div>
-          {displaySubtitle && <div className="setup-card-subtitle">{displaySubtitle}</div>}
-        </div>
-      </div>
+      <span className="setup-icon">{icon}</span>
+      <h3 className="setup-title">{title}</h3>
+      <p className="setup-desc">{description}</p>
       <ol className="setup-steps">
         {steps.map((step, i) => (
-          <li key={i} className="setup-step">
-            <span className="step-num">{i + 1}</span>
-            <span className="step-text">{step.text}</span>
-          </li>
+          <li key={i}>{step.text}</li>
         ))}
       </ol>
     </div>

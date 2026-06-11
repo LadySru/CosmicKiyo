@@ -12,7 +12,8 @@ export async function GET() {
 
   try {
     const url = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&limit=12&access_token=${token}`;
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res = await fetch(url, { next: { revalidate: 300 } } as any);
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));

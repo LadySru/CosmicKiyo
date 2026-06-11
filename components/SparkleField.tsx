@@ -9,9 +9,9 @@ interface Sparkle {
   glyph: string;
   top: string;
   left: string;
-  fontSize: string;
   dur: string;
   delay: string;
+  size: string;
 }
 
 export default function SparkleField() {
@@ -21,11 +21,11 @@ export default function SparkleField() {
     const generated: Sparkle[] = Array.from({ length: 24 }, (_, i) => ({
       id: i,
       glyph: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
-      top: `${Math.random() * 92}%`,
-      left: `${Math.random() * 96}%`,
-      fontSize: `${8 + Math.random() * 12}px`,
-      dur: `${1.8 + Math.random() * 2.2}s`,
-      delay: `${Math.random() * 3}s`,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      dur: `${2 + Math.random() * 3}s`,
+      delay: `${Math.random() * 4}s`,
+      size: `${10 + Math.random() * 10}px`,
     }));
     setSparkles(generated);
   }, []);
@@ -39,9 +39,9 @@ export default function SparkleField() {
           style={{
             top: s.top,
             left: s.left,
-            fontSize: s.fontSize,
             '--dur': s.dur,
             '--delay': s.delay,
+            fontSize: s.size,
           } as React.CSSProperties}
         >
           {s.glyph}

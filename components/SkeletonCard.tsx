@@ -13,9 +13,10 @@ export function SkeletonRow() {
     <div className="skeleton-row">
       <div className="skeleton skeleton-thumb" />
       <div style={{ flex: 1 }}>
-        <div className="skeleton skeleton-line" />
-        <div className="skeleton skeleton-line-sm" />
+        <div className="skeleton skeleton-line" style={{ width: '70%' }} />
+        <div className="skeleton skeleton-line" style={{ width: '45%' }} />
       </div>
+      <div className="skeleton" style={{ width: 60, height: 22, borderRadius: 999 }} />
     </div>
   );
 }

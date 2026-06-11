@@ -36,7 +36,8 @@ export async function GET() {
 
   try {
     const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${apiKey}&steamid=${STEAM_ID}&count=6`;
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res = await fetch(url, { next: { revalidate: 300 } } as any);
 
     if (!res.ok) {
       return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], mock: true });
