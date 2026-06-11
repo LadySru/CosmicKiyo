@@ -1,64 +1,47 @@
 import { NextResponse } from 'next/server';
-import type { SteamGame } from '@/lib/types';
 
 const STEAM_ID = '76561198199646829';
 
-const MOCK_GAMES: SteamGame[] = [
-  {
-    appid: 1,
-    name: 'Genshin Impact',
-    playtime_forever: 3200,
-    playtime_2weeks: 420,
-    img_icon_url: '',
-  },
-  {
-    appid: 2,
-    name: 'Stardew Valley',
-    playtime_forever: 1850,
-    playtime_2weeks: 180,
-    img_icon_url: '',
-  },
-  {
-    appid: 3,
-    name: 'Hollow Knight',
-    playtime_forever: 720,
-    playtime_2weeks: 60,
-    img_icon_url: '',
-  },
+const MOCK_GAMES = [
+  { appid: 1, name: 'Final Fantasy XIV Online', playtime_forever: 12400, playtime_2weeks: 360, img_icon_url: '' },
+  { appid: 2, name: 'Stardew Valley', playtime_forever: 8200, playtime_2weeks: 120, img_icon_url: '' },
+  { appid: 3, name: 'Genshin Impact', playtime_forever: 5600, playtime_2weeks: 240, img_icon_url: '' },
 ];
 
 export async function GET() {
-  const apiKey = process.env.STEAM_API_KEY;
+  const key = process.env.STEAM_API_KEY;
 
-  if (!apiKey) {
-    return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], mock: true });
+  if (!key) {
+    return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], isMock: true });
   }
 
   try {
-    const url = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${apiKey}&steamid=${STEAM_ID}&count=6`;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const res = await fetch(url, { next: { revalidate: 300 } } as any);
+    const [gamesRes, ssRes] = await Promise.allSettled([
+      fetch(
+        `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${key}&steamid=${STEAM_ID}&count=6`,
+        { next: { revalidate: 3600 } }
+      ),
+      fetch(
+        `https://api.steampowered.com/ISteamRemoteStorage/GetUserFiles/v1/?steamid=${STEAM_ID}&type=screenshot&numperpage=12&key=${key}`,
+        { next: { revalidate: 3600 } }
+      ),
+    ]);
 
-    if (!res.ok) {
-      return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], mock: true });
+    let recentGames = MOCK_GAMES;
+    let screenshots: unknown[] = [];
+
+    if (gamesRes.status === 'fulfilled' && gamesRes.value.ok) {
+      const gd = await gamesRes.value.json();
+      recentGames = gd?.response?.games || MOCK_GAMES;
     }
 
-    const data = await res.json();
-    const games: SteamGame[] = (data?.response?.games ?? []).map((g: Record<string, unknown>) => ({
-      appid: g.appid as number,
-      name: g.name as string,
-      playtime_forever: g.playtime_forever as number,
-      playtime_2weeks: g.playtime_2weeks as number | undefined,
-      img_icon_url: g.img_icon_url as string,
-    }));
-
-    if (games.length === 0) {
-      return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], mock: true });
+    if (ssRes.status === 'fulfilled' && ssRes.value.ok) {
+      const sd = await ssRes.value.json();
+      screenshots = sd?.response?.publishedfiledetails || [];
     }
 
-    return NextResponse.json({ recentGames: games, screenshots: [] });
+    return NextResponse.json({ recentGames, screenshots });
   } catch (e) {
-    console.error('[steam route]', e);
-    return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], mock: true });
+    return NextResponse.json({ recentGames: MOCK_GAMES, screenshots: [], error: String(e) });
   }
 }

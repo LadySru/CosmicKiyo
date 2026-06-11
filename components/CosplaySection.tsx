@@ -1,70 +1,110 @@
 'use client';
 
-import cosplays from '@/public/cosplays.json';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import type { InstagramPost } from '@/lib/types';
+import SkeletonCard from './SkeletonCard';
+import SetupCard from './SetupCard';
 
-interface CosplayEntry {
-  id: string;
-  character: string;
-  series: string;
-  emoji: string;
-  bgColor: string;
-  instagramUrl: string;
-  isFave: boolean;
+interface IGResponse {
+  posts?: InstagramPost[];
+  error?: string;
+  message?: string;
 }
 
-const data: CosplayEntry[] = cosplays as CosplayEntry[];
+function formatCaption(caption?: string): string {
+  if (!caption) return 'Cosplay post';
+  return caption.replace(/#\w+/g, '').replace(/\n+/g, ' ').trim().slice(0, 60) || 'Cosplay post';
+}
 
 export default function CosplaySection() {
+  const [data, setData] = useState<IGResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/instagram')
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => { setData({ error: 'fetch_error' }); setLoading(false); });
+  }, []);
+
   return (
-    <div className="section">
-      <div className="sec-header">
-        <span className="sec-icon">📸</span>
-        <h2>Cosplay Gallery</h2>
-      </div>
+    <section className="section">
+      <h2 className="sec-header">✦ Cosplay Gallery</h2>
+      <p className="sec-sub">magical transformations & character love</p>
 
-      <a
-        href="https://www.instagram.com/cosplayer.kiyo/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="ig-banner"
-      >
-        <span className="ig-banner-icon">✨</span>
-        <span>View my Instagram <strong>@cosplayer.kiyo</strong></span>
-        <span className="ig-banner-arrow">→</span>
-      </a>
+      {loading && (
+        <div className="cosplay-grid">
+          {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      )}
 
-      <div className="cosplay-grid" style={{ marginTop: '24px' }}>
-        {data.map((entry) => (
-          <a
-            key={entry.id}
-            href={entry.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="c-card"
-          >
-            <div
-              className="c-img"
-              style={{ background: entry.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      {!loading && data?.error === 'not_configured' && (
+        <SetupCard
+          icon="📸"
+          title="Connect Instagram"
+          description="Show your cosplay posts directly on your portfolio by connecting your Instagram account."
+          steps={[
+            { text: 'Create a Facebook Developer App at developers.facebook.com' },
+            { text: 'Add the Instagram Basic Display product to your app' },
+            { text: 'Generate a Long-Lived Access Token for your Instagram account' },
+            { text: 'Add INSTAGRAM_ACCESS_TOKEN to your .env.local file and restart' },
+          ]}
+        />
+      )}
+
+      {!loading && data?.posts && data.posts.length > 0 && (
+        <div className="cosplay-grid">
+          {data.posts.map((post) => (
+            <a
+              key={post.id}
+              href={post.permalink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="c-card"
             >
-              <span style={{ fontSize: '4rem' }}>{entry.emoji}</span>
-              {entry.isFave && <span className="ribbon">❤ fave</span>}
-            </div>
-            <div className="c-info">
-              <div className="c-name">{entry.character}</div>
-              <div className="c-from">{entry.series}</div>
-            </div>
-          </a>
-        ))}
-        <a
-          href="https://www.instagram.com/cosplayer.kiyo/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="add-card"
-        >
-          <span className="add-card-icon">📷</span>
-          <span>See all on Instagram</span>
-        </a>
-      </div>
-    </div>
+              <div className="c-img">
+                {(post.media_type === 'IMAGE' || post.media_type === 'CAROUSEL_ALBUM') && post.media_url ? (
+                  <Image
+                    src={post.media_url}
+                    alt={formatCaption(post.caption)}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 240px"
+                    style={{ objectFit: 'cover' }}
+                    unoptimized
+                  />
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '2rem' }}>
+                    🎬
+                  </div>
+                )}
+                {post.media_type === 'CAROUSEL_ALBUM' && <span className="ribbon">album</span>}
+                {post.media_type === 'VIDEO' && <span className="ribbon">video</span>}
+              </div>
+              <div className="c-info">
+                <div className="c-name">{formatCaption(post.caption)}</div>
+                <div className="c-from">
+                  {new Date(post.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {!loading && data?.posts && data.posts.length === 0 && (
+        <div className="error-state">
+          <div className="error-icon">🌸</div>
+          <p className="error-msg">No posts found yet. Time to go cosplay something magical!</p>
+        </div>
+      )}
+
+      {!loading && data?.error && data.error !== 'not_configured' && (
+        <div className="error-state">
+          <div className="error-icon">✦</div>
+          <p className="error-msg">Couldn&apos;t load Instagram posts. Check your access token.</p>
+        </div>
+      )}
+    </section>
   );
 }
