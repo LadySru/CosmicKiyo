@@ -1,6 +1,6 @@
-import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
+
+const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdninstagram.com' },
@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'img.mydramalist.com' },
       { protocol: 'https', hostname: 'media.kitsu.app' },
       { protocol: 'https', hostname: 'media.steampowered.com' },
+      { protocol: 'https', hostname: 'cdn.akamai.steamstatic.com' },
+      { protocol: 'https', hostname: 's4.anilist.co' },
+      { protocol: 'https', hostname: '*.anilist.co' },
     ],
   },
 };
