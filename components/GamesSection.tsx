@@ -2,162 +2,128 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import type { SteamGame, SteamResponse } from '@/lib/types';
+import type { SteamResponse, SteamGame } from '@/lib/types';
+import SkeletonCard from './SkeletonCard';
 import SetupCard from './SetupCard';
 
-function formatHours(minutes: number) {
+function formatHours(minutes: number): string {
   const hours = Math.round(minutes / 60);
-  if (hours < 1) return `${minutes} min`;
-  return `${hours.toLocaleString()} hrs`;
+  if (hours < 1) return `${minutes}m`;
+  return `${hours.toLocaleString()}h`;
 }
 
-function GameIcon({ game }: { game: SteamGame }) {
-  if (!game.img_icon_url || game.appid <= 3) {
-    const emojis: Record<number, string> = { 1: '⚔️', 2: '🌾', 3: '🗡️' };
-    return (
-      <div className="g-icon">
-        <span>{emojis[game.appid] ?? '🎮'}</span>
-      </div>
-    );
+function getGameIconUrl(game: SteamGame): string {
+  if (game.img_icon_url) {
+    return `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`;
   }
-  return (
-    <div className="g-icon">
-      <Image
-        src={`https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`}
-        alt={game.name}
-        width={56}
-        height={56}
-        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-      />
-    </div>
-  );
-}
-
-function SkeletonGameCard() {
-  return (
-    <div
-      className="g-card"
-      style={{ gap: 14 }}
-    >
-      <div
-        className="skeleton"
-        style={{ width: 56, height: 56, borderRadius: 10, flexShrink: 0 }}
-      />
-      <div style={{ flex: 1 }}>
-        <div className="skeleton" style={{ height: 14, borderRadius: 6, marginBottom: 8 }} />
-        <div className="skeleton" style={{ height: 11, width: '55%', borderRadius: 6 }} />
-      </div>
-    </div>
-  );
+  return '';
 }
 
 export default function GamesSection() {
-  const [data, setData] = useState<SteamResponse | null>(null);
+  const [data, setData] = useState<(SteamResponse & { isMock?: boolean }) | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetch('/api/steam')
       .then((r) => r.json())
-      .then((d: SteamResponse) => setData(d))
-      .catch(() => setData({ recentGames: [], screenshots: [], error: 'fetch_error' }))
-      .finally(() => setLoading(false));
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => { setError(true); setLoading(false); });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="section">
-        <div className="sec-header">
-          <span className="sec-icon">🎮</span>
-          <h2>Gaming Corner</h2>
-        </div>
-        <div className="game-grid">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <SkeletonGameCard key={i} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  const isMock = (data as (SteamResponse & { mock?: boolean }))?.mock;
-
   return (
-    <div className="section">
-      <div className="sec-header">
-        <span className="sec-icon">🎮</span>
-        <h2>Gaming Corner</h2>
-      </div>
+    <section className="section">
+      <h2 className="sec-header">✦ Gaming Corner</h2>
+      <p className="sec-sub">recently played games from Steam</p>
 
-      {isMock && (
-        <div style={{ marginBottom: 20 }}>
-          <SetupCard
-            icon="🎮"
-            platform="Steam Setup"
-            subtitle="Connect your Steam account to show real recently played games"
-            steps={[
-              {
-                text: (
-                  <>
-                    Get a free API key at{' '}
-                    <a
-                      href="https://steamcommunity.com/dev/apikey"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--purple-400)', textDecoration: 'underline' }}
-                    >
-                      steamcommunity.com/dev/apikey
-                    </a>
-                  </>
-                ),
-              },
-              {
-                text: (
-                  <>
-                    Add to <code>.env.local</code>: <code>STEAM_API_KEY=your_key</code>
-                  </>
-                ),
-              },
-              {
-                text: (
-                  <>
-                    Make sure your Steam profile is public — Steam ID{' '}
-                    <code>76561198199646829</code> is already configured.
-                  </>
-                ),
-              },
-              { text: 'Restart the dev server to see your real recently played games!' },
-            ]}
-          />
-          <div className="divider" style={{ marginTop: 28 }}>sample games</div>
+      {loading && (
+        <div className="game-grid">
+          {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       )}
 
-      {!isMock && (
-        <p className="sec-desc">˚₊· recently played on Steam ·˚</p>
+      {error && (
+        <div className="error-state">
+          <div className="error-icon">🎮</div>
+          <p className="error-msg">Couldn&apos;t load games. Please try again later.</p>
+        </div>
       )}
 
-      <div className="game-grid">
-        {(data?.recentGames ?? []).map((game: SteamGame) => (
-          <a
-            key={game.appid}
-            href={game.appid > 3 ? `https://store.steampowered.com/app/${game.appid}` : '#'}
-            target={game.appid > 3 ? '_blank' : undefined}
-            rel="noopener noreferrer"
-            className="g-card"
-            style={{ textDecoration: 'none' }}
-          >
-            <GameIcon game={game} />
-            <div className="g-info">
-              <div className="g-title">{game.name}</div>
-              <div className="g-genre">Steam</div>
-              <div className="g-hrs">
-                {formatHours(game.playtime_forever)} total
-                {game.playtime_2weeks ? ` · ${formatHours(game.playtime_2weeks)} recent` : ''}
+      {!loading && !error && data && (
+        <>
+          {data.isMock && (
+            <SetupCard
+              icon="🎮"
+              title="Connect Steam"
+              description="Show your recently played games by connecting your Steam account."
+              steps={[
+                { text: 'Go to steamcommunity.com/dev/apikey and generate an API key' },
+                { text: 'Make sure your Steam profile is set to Public' },
+                { text: 'Add STEAM_API_KEY to your .env.local file and restart' },
+              ]}
+            />
+          )}
+
+          <div className="game-grid" style={{ marginTop: data.isMock ? 24 : 0 }}>
+            {data.recentGames.map((game) => {
+              const iconUrl = getGameIconUrl(game);
+              const recentHours = game.playtime_2weeks ? formatHours(game.playtime_2weeks) : null;
+              const totalHours = formatHours(game.playtime_forever);
+
+              return (
+                <a
+                  key={game.appid}
+                  href={game.appid > 3 ? `https://store.steampowered.com/app/${game.appid}` : '#'}
+                  target={game.appid > 3 ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  className="g-card"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className="g-icon">
+                    {iconUrl ? (
+                      <Image
+                        src={iconUrl}
+                        alt={game.name}
+                        fill
+                        sizes="64px"
+                        style={{ objectFit: 'cover' }}
+                        unoptimized
+                      />
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '1.8rem' }}>🎮</div>
+                    )}
+                  </div>
+                  <div className="g-title">{game.name}</div>
+                  {recentHours && <div className="g-genre">▶ {recentHours} recently</div>}
+                  <div className="g-hrs">{totalHours} total</div>
+                </a>
+              );
+            })}
+          </div>
+
+          {data.screenshots && data.screenshots.length > 0 && (
+            <>
+              <div className="divider">✦ screenshots ✦</div>
+              <div className="screenshot-grid">
+                {data.screenshots.slice(0, 12).map((ss) => (
+                  <div key={ss.publishedfileid} className="ss-item">
+                    {ss.preview_url && (
+                      <Image
+                        src={ss.preview_url}
+                        alt={ss.title || 'Screenshot'}
+                        fill
+                        sizes="160px"
+                        style={{ objectFit: 'cover' }}
+                        unoptimized
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
+            </>
+          )}
+        </>
+      )}
+    </section>
   );
 }

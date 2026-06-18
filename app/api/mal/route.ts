@@ -3,31 +3,6 @@ import type { AnimeEntry } from '@/lib/types';
 
 const MAL_USERNAME = 'KiyoDreams';
 
-type JikanEntry = {
-  node: {
-    id: number;
-    title: string;
-    main_picture?: { medium?: string; large?: string };
-    num_episodes?: number;
-  };
-  list_status: {
-    status: string;
-    score: number;
-    num_episodes_watched: number;
-  };
-};
-
-function mapEntry(entry: JikanEntry): AnimeEntry {
-  return {
-    mal_id: entry.node.id,
-    title: entry.node.title,
-    image_url: entry.node.main_picture?.medium ?? entry.node.main_picture?.large ?? '',
-    episodes: entry.node.num_episodes ?? null,
-    watched_episodes: entry.list_status.num_episodes_watched,
-    score: entry.list_status.score > 0 ? entry.list_status.score : null,
-    status: entry.list_status.status as AnimeEntry['status'],
-  };
-}
 
 type JikanV4Item = {
   node?: {
@@ -62,11 +37,13 @@ export async function GET() {
     const [watchRes, completedRes] = await Promise.allSettled([
       fetch(
         `https://api.jikan.moe/v4/users/${MAL_USERNAME}/animelist?status=watching&limit=10`,
-        { next: { revalidate: 600 } }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { next: { revalidate: 600 } } as any
       ),
       fetch(
         `https://api.jikan.moe/v4/users/${MAL_USERNAME}/animelist?status=completed&order_by=score&sort=desc&limit=10`,
-        { next: { revalidate: 600 } }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { next: { revalidate: 600 } } as any
       ),
     ]);
 

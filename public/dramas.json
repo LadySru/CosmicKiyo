@@ -1,0 +1,26 @@
+{
+  "watching": [
+    {
+      "id": 1,
+      "title": "Your current drama",
+      "image_url": "",
+      "episodes": 16,
+      "watched_episodes": 6,
+      "score": null,
+      "status": "watching",
+      "country": "South Korea"
+    }
+  ],
+  "completed": [
+    {
+      "id": 2,
+      "title": "Your favorite drama",
+      "image_url": "",
+      "episodes": 20,
+      "watched_episodes": 20,
+      "score": 9.5,
+      "status": "completed",
+      "country": "South Korea"
+    }
+  ]
+}

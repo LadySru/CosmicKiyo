@@ -1,70 +1,83 @@
 'use client';
 
-import cosplays from '@/public/cosplays.json';
+import { useEffect, useState } from 'react';
+import type { CosplayEntry } from '@/lib/types';
+import SkeletonCard from './SkeletonCard';
 
-interface CosplayEntry {
-  id: string;
-  character: string;
-  series: string;
-  emoji: string;
-  bgColor: string;
-  instagramUrl: string;
-  isFave: boolean;
-}
-
-const data: CosplayEntry[] = cosplays as CosplayEntry[];
+const IG_USERNAME = process.env.NEXT_PUBLIC_IG_USERNAME ?? 'cosplayer.kiyo';
+const IG_PROFILE_URL = `https://www.instagram.com/${IG_USERNAME}/`;
 
 export default function CosplaySection() {
+  const [cosplays, setCosplays] = useState<CosplayEntry[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/cosplays')
+      .then((r) => r.json())
+      .then((d) => { setCosplays(d); setLoading(false); })
+      .catch(() => { setCosplays([]); setLoading(false); });
+  }, []);
+
   return (
-    <div className="section">
-      <div className="sec-header">
-        <span className="sec-icon">📸</span>
-        <h2>Cosplay Gallery</h2>
-      </div>
+    <section className="section">
+      <h2 className="sec-header">✦ Cosplay Gallery</h2>
+      <p className="sec-sub">magical transformations & character love</p>
 
       <a
-        href="https://www.instagram.com/cosplayer.kiyo/"
+        href={IG_PROFILE_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="ig-banner"
+        className="ig-cta"
       >
-        <span className="ig-banner-icon">✨</span>
-        <span>View my Instagram <strong>@cosplayer.kiyo</strong></span>
-        <span className="ig-banner-arrow">→</span>
+        ✨ View my Instagram @{IG_USERNAME}
       </a>
 
-      <div className="cosplay-grid" style={{ marginTop: '24px' }}>
-        {data.map((entry) => (
+      {loading && (
+        <div className="cosplay-grid">
+          {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      )}
+
+      {!loading && cosplays && cosplays.length > 0 && (
+        <div className="cosplay-grid">
+          {cosplays.map((c) => (
+            <a
+              key={c.id}
+              href={c.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="c-card"
+            >
+              <div className="c-img" style={{ background: c.bgColor }}>
+                {c.emoji}
+                {c.isFave && <span className="ribbon">fave ♡</span>}
+              </div>
+              <div className="c-info">
+                <div className="c-name">{c.character}</div>
+                <div className="c-from">{c.series}</div>
+              </div>
+            </a>
+          ))}
           <a
-            key={entry.id}
-            href={entry.instagramUrl}
+            href={IG_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="c-card"
+            className="add-card"
           >
-            <div
-              className="c-img"
-              style={{ background: entry.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <span style={{ fontSize: '4rem' }}>{entry.emoji}</span>
-              {entry.isFave && <span className="ribbon">❤ fave</span>}
-            </div>
-            <div className="c-info">
-              <div className="c-name">{entry.character}</div>
-              <div className="c-from">{entry.series}</div>
-            </div>
+            <div className="plus">+</div>
+            <span>see more on Instagram</span>
           </a>
-        ))}
-        <a
-          href="https://www.instagram.com/cosplayer.kiyo/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="add-card"
-        >
-          <span className="add-card-icon">📷</span>
-          <span>See all on Instagram</span>
-        </a>
-      </div>
-    </div>
+        </div>
+      )}
+
+      {!loading && cosplays && cosplays.length === 0 && (
+        <div className="error-state">
+          <div className="error-icon">🌸</div>
+          <p className="error-msg">
+            No cosplays added yet. Edit <code>public/cosplays.json</code> to add your shoots.
+          </p>
+        </div>
+      )}
+    </section>
   );
 }
