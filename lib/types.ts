@@ -81,4 +81,14 @@ export interface DramaResponse {
   message?: string;
 }
 
+export interface CosplayEntry {
+  id: string;
+  character: string;
+  series: string;
+  emoji: string;
+  bgColor: string;
+  instagramUrl: string;
+  isFave?: boolean;
+}
+
 export type TabId = 'cosplays' | 'anime' | 'games' | 'shows';

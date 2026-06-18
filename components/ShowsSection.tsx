@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import type { DramaResponse, DraamaShow } from '@/lib/types';
 import { SkeletonRow } from './SkeletonCard';
-import SetupCard from './SetupCard';
 
 export default function ShowsSection() {
   const [data, setData] = useState<DramaResponse | null>(null);
@@ -69,20 +68,11 @@ export default function ShowsSection() {
         </div>
       )}
 
-      {!loading && data?.error === 'not_configured' && (
-        <SetupCard
-          icon="🎬"
-          title="Connect DramaList"
-          description="Show your drama watchlist by connecting your MyDramaList account."
-          steps={[
-            { text: 'Go to mydramalist.com/apps and sign in' },
-            { text: 'Register for an API key (may require approval)' },
-            { text: 'Add MDL_API_KEY to your .env.local file and restart' },
-          ]}
-        />
+      {!loading && data?.error && (
+        <p className="fallback-note">✦ {data.message ?? 'Showing sample data.'}</p>
       )}
 
-      {!loading && !data?.error && data && (
+      {!loading && data && (
         <>
           {data.watching.length > 0 && (
             <>
@@ -111,13 +101,6 @@ export default function ShowsSection() {
             </div>
           )}
         </>
-      )}
-
-      {!loading && data?.error && data.error !== 'not_configured' && (
-        <div className="error-state">
-          <div className="error-icon">🎬</div>
-          <p className="error-msg">Couldn&apos;t load drama list. Please try again later.</p>
-        </div>
       )}
     </section>
   );

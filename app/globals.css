@@ -273,6 +273,41 @@ body {
   margin-bottom: 28px;
 }
 
+.ig-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--pink-deep);
+  background: var(--surface);
+  border: 1.5px solid var(--pink-light);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ig-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.fallback-note {
+  font-size: 0.8rem;
+  color: var(--text3);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ig-cta { color: var(--pink-light); }
+}
+
 /* ── COSPLAY GRID ── */
 .cosplay-grid {
   display: grid;
