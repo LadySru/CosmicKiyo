@@ -22,7 +22,14 @@
     "emoji": "🖤",
     "bgColor": "#f0f0f4",
     "instagramUrl": "https://www.instagram.com/p/DevH5pKjSo2/",
-    "isFave": false
+    "isFave": false,
+    "imageUrl": "/cosplays/rel-1.webp",
+    "images": [
+      "/cosplays/rel-1.webp",
+      "/cosplays/rel-2.webp",
+      "/cosplays/rel-3.webp",
+      "/cosplays/rel-4.webp"
+    ]
   },
   {
     "id": "3",
@@ -40,7 +47,8 @@
     "emoji": "🌿",
     "bgColor": "#f0fbf4",
     "instagramUrl": "https://www.instagram.com/p/DKcdXbANfrQ/",
-    "isFave": false
+    "isFave": false,
+    "imageUrl": "/cosplays/maomao-1.jpg"
   },
   {
     "id": "5",
@@ -49,7 +57,12 @@
     "emoji": "🌙",
     "bgColor": "#fff0f8",
     "instagramUrl": "https://www.instagram.com/p/DJ43k1Bh37n/",
-    "isFave": true
+    "isFave": true,
+    "imageUrl": "/cosplays/sailor-1.jpg",
+    "images": [
+      "/cosplays/sailor-1.jpg",
+      "/cosplays/sailor-2.jpg"
+    ]
   },
   {
     "id": "6",
