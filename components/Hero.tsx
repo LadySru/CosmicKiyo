@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import SparkleField from './SparkleField';
 
 export default function Hero() {
@@ -8,7 +9,14 @@ export default function Hero() {
       <div className="avatar-wrap">
         <div className="avatar-orbit" />
         <div className="avatar-ring" />
-        <span className="avatar-emoji">🌸</span>
+        <Image
+          src="/avatar.webp"
+          alt="Kiyo Dreams"
+          width={120}
+          height={120}
+          className="avatar-photo"
+          priority
+        />
       </div>
 
       <h1 className="hero-name">Kiyo Dreams</h1>

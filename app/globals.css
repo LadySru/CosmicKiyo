@@ -117,6 +117,15 @@ body {
   line-height: 1;
 }
 
+.avatar-photo {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 30%;
+  animation: float 4s ease-in-out infinite;
+  border: 3px solid var(--pink-mid);
+  box-shadow: 0 0 20px var(--shadow);
+}
+
 .hero-name {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
