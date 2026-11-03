@@ -20,10 +20,10 @@ export default function Hero() {
       </div>
 
       <h1 className="hero-name">Kiyo Dreams</h1>
-      <p className="hero-handle">˚₊· cosplayer · gamer · dreamer ·˚</p>
+      <p className="hero-handle">˚₊· dev · cosplayer · gamer · dreamer ·˚</p>
 
       <div className="pill-row">
-        <span className="pill pill-a">🎀 cosplay queen</span>
+        <span className="pill pill-a">💻 dev & dreamer</span>
         <span className="pill pill-b">✨ magical girl</span>
         <span className="pill pill-c">🌸 anime lover</span>
         <span className="pill pill-d">🎮 gamer girl</span>

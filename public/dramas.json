@@ -1,26 +1,7 @@
-{
-  "watching": [
-    {
-      "id": 1,
-      "title": "Your current drama",
-      "image_url": "",
-      "episodes": 16,
-      "watched_episodes": 6,
-      "score": null,
-      "status": "watching",
-      "country": "South Korea"
-    }
-  ],
-  "completed": [
-    {
-      "id": 2,
-      "title": "Your favorite drama",
-      "image_url": "",
-      "episodes": 20,
-      "watched_episodes": 20,
-      "score": 9.5,
-      "status": "completed",
-      "country": "South Korea"
-    }
-  ]
-}
+[
+  {"id":1,"title":"Squid Game","image_url":"","episodes":9,"watched_episodes":9,"score":9,"status":"completed","country":"South Korea","year":2021},
+  {"id":2,"title":"My Love from the Star","image_url":"","episodes":21,"watched_episodes":21,"score":9,"status":"completed","country":"South Korea","year":2013},
+  {"id":3,"title":"Business Proposal","image_url":"","episodes":12,"watched_episodes":12,"score":8,"status":"completed","country":"South Korea","year":2022},
+  {"id":4,"title":"Crash Landing on You","image_url":"","episodes":16,"watched_episodes":16,"score":10,"status":"completed","country":"South Korea","year":2019},
+  {"id":5,"title":"Vincenzo","image_url":"","episodes":20,"watched_episodes":5,"score":null,"status":"watching","country":"South Korea","year":2021}
+]

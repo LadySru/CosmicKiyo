@@ -34,6 +34,20 @@ const PLATFORMS = [
     url: 'https://myanimelist.net/profile/KiyoDreams',
     accent: '#2e51a2',
   },
+  {
+    emoji: '👑',
+    name: 'Throne Wishlist',
+    handle: '@cosplayerkiyo',
+    url: 'https://throne.com/cosplayerkiyo',
+    accent: '#c9a84c',
+  },
+  {
+    emoji: '🟣',
+    name: 'Twitch',
+    handle: '@kiyodreams',
+    url: 'https://www.twitch.tv/kiyodreams',
+    accent: '#9146FF',
+  },
 ];
 
 export default function SocialHub() {

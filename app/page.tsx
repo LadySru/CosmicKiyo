@@ -8,6 +8,7 @@ import GamesSection from '@/components/GamesSection';
 import ShowsSection from '@/components/ShowsSection';
 import SocialHub from '@/components/SocialHub';
 import Guestbook from '@/components/Guestbook';
+import CosplayPoll from '@/components/CosplayPoll';
 
 type Tab = 'cosplay' | 'anime' | 'games' | 'shows' | 'community';
 
@@ -24,7 +25,6 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
       <nav className="nav">
         {tabs.map((tab) => (
           <button
@@ -36,6 +36,7 @@ export default function Home() {
           </button>
         ))}
       </nav>
+      <Hero />
       <main>
         {activeTab === 'cosplay' && <CosplaySection />}
         {activeTab === 'anime' && <AnimeSection />}
@@ -44,6 +45,8 @@ export default function Home() {
         {activeTab === 'community' && (
           <section className="section">
             <SocialHub />
+            <div className="divider" style={{ margin: '2rem 0' }} />
+            <CosplayPoll />
             <div className="divider" style={{ margin: '2rem 0' }} />
             <Guestbook />
           </section>
