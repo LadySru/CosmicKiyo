@@ -89,6 +89,8 @@ export interface CosplayEntry {
   bgColor: string;
   instagramUrl: string;
   isFave?: boolean;
+  imageUrl?: string;       // local /cosplays/filename.webp or external URL
+  images?: string[];       // additional photos for the same shoot
 }
 
 export type TabId = 'cosplays' | 'anime' | 'games' | 'shows';

@@ -354,6 +354,32 @@ body {
   text-transform: uppercase;
 }
 
+/* thumbnail strip for multi-photo shoots */
+.c-thumbs {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.06);
+}
+
+.c-thumb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  transition: border-color 0.15s;
+}
+
+.c-thumb.active {
+  border-color: var(--pink-mid);
+}
+
 .c-info {
   padding: 12px 14px;
 }

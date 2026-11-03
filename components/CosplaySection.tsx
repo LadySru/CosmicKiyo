@@ -1,27 +1,73 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import type { CosplayEntry } from '@/lib/types';
 import SkeletonCard from './SkeletonCard';
 
 const IG_USERNAME = process.env.NEXT_PUBLIC_IG_USERNAME ?? 'cosplayer.kiyo';
 const IG_PROFILE_URL = `https://www.instagram.com/${IG_USERNAME}/`;
 
-const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
-
-function ShareButton({ character, url }: { character: string; url: string }) {
-  if (!canShare) return null;
+function ShareButton({ entry }: { entry: CosplayEntry }) {
+  const [supported, setSupported] = useState(false);
+  useEffect(() => { setSupported(!!navigator.share); }, []);
+  if (!supported) return null;
   return (
     <button
       className="c-share"
-      aria-label={`Share ${character}`}
+      aria-label="Share"
       onClick={(e) => {
         e.preventDefault();
-        navigator.share({ title: `${character} cosplay by Kiyo Dreams`, url });
+        navigator.share({ title: `${entry.character} cosplay by Kiyo Dreams`, url: entry.instagramUrl }).catch(() => {});
       }}
-    >
-      📤
-    </button>
+    >📤</button>
+  );
+}
+
+function PhotoCard({ entry }: { entry: CosplayEntry }) {
+  const [activeImg, setActiveImg] = useState(0);
+  const photos = entry.images ?? (entry.imageUrl ? [entry.imageUrl] : []);
+  const hasPhotos = photos.length > 0;
+
+  return (
+    <a href={entry.instagramUrl} target="_blank" rel="noopener noreferrer" className="c-card">
+      <div className="c-img" style={hasPhotos ? undefined : { background: entry.bgColor }}>
+        {hasPhotos ? (
+          <Image
+            src={photos[activeImg]}
+            alt={`${entry.character} cosplay`}
+            fill
+            sizes="(max-width: 600px) 100vw, 280px"
+            style={{ objectFit: 'cover', objectPosition: 'top' }}
+          />
+        ) : (
+          <span style={{ fontSize: '2.5rem' }}>{entry.emoji}</span>
+        )}
+        {entry.isFave && <span className="ribbon">fave ♡</span>}
+        <ShareButton entry={entry} />
+      </div>
+
+      {photos.length > 1 && (
+        <div className="c-thumbs" onClick={(e) => e.preventDefault()}>
+          {photos.map((src, i) => (
+            <button
+              key={i}
+              className={`c-thumb${i === activeImg ? ' active' : ''}`}
+              onMouseEnter={() => setActiveImg(i)}
+              onClick={(e) => { e.preventDefault(); setActiveImg(i); }}
+              aria-label={`Photo ${i + 1}`}
+            >
+              <Image src={src} alt="" fill sizes="44px" style={{ objectFit: 'cover', objectPosition: 'top' }} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="c-info">
+        <div className="c-name">{entry.character}</div>
+        <div className="c-from">{entry.series}</div>
+      </div>
+    </a>
   );
 }
 
@@ -41,12 +87,7 @@ export default function CosplaySection() {
       <h2 className="sec-header">✦ Cosplay Gallery</h2>
       <p className="sec-sub">magical transformations & character love</p>
 
-      <a
-        href={IG_PROFILE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="ig-cta"
-      >
+      <a href={IG_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="ig-cta">
         ✨ View my Instagram @{IG_USERNAME}
       </a>
 
@@ -58,43 +99,18 @@ export default function CosplaySection() {
 
       {!loading && cosplays && cosplays.length > 0 && (
         <div className="cosplay-grid">
-          {cosplays.map((c) => (
-            <a
-              key={c.id}
-              href={c.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="c-card"
-            >
-              <div className="c-img" style={{ background: c.bgColor }}>
-                {c.emoji}
-                {c.isFave && <span className="ribbon">fave ♡</span>}
-              </div>
-              <div className="c-info">
-                <div className="c-name">{c.character}</div>
-                <div className="c-from">{c.series}</div>
-              </div>
-              <ShareButton character={c.character} url={c.instagramUrl} />
-            </a>
-          ))}
-          <a
-            href={IG_PROFILE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="add-card"
-          >
+          {cosplays.map((c) => <PhotoCard key={c.id} entry={c} />)}
+          <a href={IG_PROFILE_URL} target="_blank" rel="noopener noreferrer" className="add-card">
             <div className="plus">+</div>
             <span>see more on Instagram</span>
           </a>
         </div>
       )}
 
-      {!loading && cosplays && cosplays.length === 0 && (
+      {!loading && cosplays?.length === 0 && (
         <div className="error-state">
           <div className="error-icon">🌸</div>
-          <p className="error-msg">
-            No cosplays added yet. Edit <code>public/cosplays.json</code> to add your shoots.
-          </p>
+          <p className="error-msg">No cosplays yet. Edit <code>public/cosplays.json</code> to add your shoots.</p>
         </div>
       )}
     </section>

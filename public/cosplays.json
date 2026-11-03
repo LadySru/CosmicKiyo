@@ -6,7 +6,14 @@
     "emoji": "🪄",
     "bgColor": "#ede8f5",
     "instagramUrl": "https://www.instagram.com/p/DfNsOluGBdM/",
-    "isFave": true
+    "isFave": true,
+    "imageUrl": "/cosplays/raven-1.webp",
+    "images": [
+      "/cosplays/raven-1.webp",
+      "/cosplays/raven-2.webp",
+      "/cosplays/raven-3.webp",
+      "/cosplays/raven-4.webp"
+    ]
   },
   {
     "id": "2",
