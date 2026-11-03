@@ -66,6 +66,25 @@
     "imageUrl": "/cosplays/sailor-1.jpg"
   },
   {
+    "id": "7",
+    "character": "Mitsuri Kanroji",
+    "series": "Demon Slayer",
+    "emoji": "🌸",
+    "bgColor": "#fff0f5",
+    "instagramUrl": "https://www.instagram.com/p/DAXY0PaNxx7/",
+    "isFave": false
+  },
+  {
+    "id": "8",
+    "character": "Shinobu Kocho",
+    "series": "Demon Slayer",
+    "emoji": "🦋",
+    "bgColor": "#f0f0ff",
+    "instagramUrl": "https://www.instagram.com/p/C-WciCVNQH7/",
+    "isFave": false,
+    "imageUrl": "/cosplays/shinobu-1.png"
+  },
+  {
     "id": "6",
     "character": "Sailor Moon Eternal",
     "series": "Sailor Moon (alt look)",
