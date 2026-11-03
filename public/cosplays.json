@@ -1,6 +1,56 @@
 [
-  { "id": "1", "character": "Sailor Moon", "series": "Sailor Moon", "emoji": "🌙", "bgColor": "#fff0f8", "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/", "isFave": true },
-  { "id": "2", "character": "Zero Two", "series": "Darling in the FranXX", "emoji": "🌸", "bgColor": "#fff5f5", "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/", "isFave": true },
-  { "id": "3", "character": "Asuka Langley", "series": "Neon Genesis Evangelion", "emoji": "🔥", "bgColor": "#fff8f0", "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/", "isFave": false },
-  { "id": "4", "character": "Miku Nakano", "series": "The Quintessential Quintuplets", "emoji": "🎧", "bgColor": "#f0f8ff", "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/", "isFave": false }
+  {
+    "id": "1",
+    "character": "Raven",
+    "series": "Teen Titans (Halloween)",
+    "emoji": "🪄",
+    "bgColor": "#ede8f5",
+    "instagramUrl": "https://www.instagram.com/p/DfNsOluGBdM/",
+    "isFave": true
+  },
+  {
+    "id": "2",
+    "character": "Re-l Mayer",
+    "series": "Ergo Proxy",
+    "emoji": "🖤",
+    "bgColor": "#f0f0f4",
+    "instagramUrl": "https://www.instagram.com/p/DevH5pKjSo2/",
+    "isFave": false
+  },
+  {
+    "id": "3",
+    "character": "Draculaura",
+    "series": "Monster High",
+    "emoji": "🦇",
+    "bgColor": "#fdf0f8",
+    "instagramUrl": "https://www.instagram.com/p/DeSoPSwskdo/",
+    "isFave": true
+  },
+  {
+    "id": "4",
+    "character": "Maomao",
+    "series": "The Apothecary Diaries",
+    "emoji": "🌿",
+    "bgColor": "#f0fbf4",
+    "instagramUrl": "https://www.instagram.com/p/DKcdXbANfrQ/",
+    "isFave": false
+  },
+  {
+    "id": "5",
+    "character": "Sailor Moon Eternal",
+    "series": "Sailor Moon",
+    "emoji": "🌙",
+    "bgColor": "#fff0f8",
+    "instagramUrl": "https://www.instagram.com/p/DJ43k1Bh37n/",
+    "isFave": true
+  },
+  {
+    "id": "6",
+    "character": "Sailor Moon Eternal",
+    "series": "Sailor Moon (alt look)",
+    "emoji": "✨",
+    "bgColor": "#f8f0ff",
+    "instagramUrl": "https://www.instagram.com/p/DJ-vnDxNXvd/",
+    "isFave": false
+  }
 ]
