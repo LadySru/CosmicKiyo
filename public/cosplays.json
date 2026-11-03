@@ -38,7 +38,12 @@
     "emoji": "🦇",
     "bgColor": "#fdf0f8",
     "instagramUrl": "https://www.instagram.com/p/DeSoPSwskdo/",
-    "isFave": true
+    "isFave": true,
+    "imageUrl": "/cosplays/draculaura-1.jpg",
+    "images": [
+      "/cosplays/draculaura-1.jpg",
+      "/cosplays/draculaura-2.jpg"
+    ]
   },
   {
     "id": "4",
