@@ -7,6 +7,24 @@ import SkeletonCard from './SkeletonCard';
 const IG_USERNAME = process.env.NEXT_PUBLIC_IG_USERNAME ?? 'cosplayer.kiyo';
 const IG_PROFILE_URL = `https://www.instagram.com/${IG_USERNAME}/`;
 
+const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+
+function ShareButton({ character, url }: { character: string; url: string }) {
+  if (!canShare) return null;
+  return (
+    <button
+      className="c-share"
+      aria-label={`Share ${character}`}
+      onClick={(e) => {
+        e.preventDefault();
+        navigator.share({ title: `${character} cosplay by Kiyo Dreams`, url });
+      }}
+    >
+      📤
+    </button>
+  );
+}
+
 export default function CosplaySection() {
   const [cosplays, setCosplays] = useState<CosplayEntry[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,6 +74,7 @@ export default function CosplaySection() {
                 <div className="c-name">{c.character}</div>
                 <div className="c-from">{c.series}</div>
               </div>
+              <ShareButton character={c.character} url={c.instagramUrl} />
             </a>
           ))}
           <a
