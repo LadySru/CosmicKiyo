@@ -335,7 +335,7 @@ body {
 .c-img {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4/5;
   background: var(--bg2);
   overflow: hidden;
 }

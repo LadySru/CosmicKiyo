@@ -38,7 +38,7 @@ function PhotoCard({ entry }: { entry: CosplayEntry }) {
             alt={`${entry.character} cosplay`}
             fill
             sizes="(max-width: 600px) 100vw, 280px"
-            style={{ objectFit: 'cover', objectPosition: 'top' }}
+            style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
           />
         ) : (
           <span style={{ fontSize: '2.5rem' }}>{entry.emoji}</span>
