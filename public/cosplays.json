@@ -1,38 +1,98 @@
 [
   {
     "id": "1",
-    "character": "Sailor Moon",
-    "series": "Sailor Moon",
-    "emoji": "🌙",
-    "bgColor": "#fff0f8",
-    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
-    "isFave": true
+    "character": "Raven",
+    "series": "Teen Titans (Halloween)",
+    "emoji": "🪄",
+    "bgColor": "#ede8f5",
+    "instagramUrl": "https://www.instagram.com/p/DfNsOluGBdM/",
+    "isFave": true,
+    "imageUrl": "/cosplays/raven-1.webp",
+    "images": [
+      "/cosplays/raven-1.webp",
+      "/cosplays/raven-2.webp",
+      "/cosplays/raven-3.webp",
+      "/cosplays/raven-4.webp"
+    ]
   },
   {
     "id": "2",
-    "character": "Zero Two",
-    "series": "Darling in the FranXX",
-    "emoji": "💘",
-    "bgColor": "#fff5f5",
-    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
-    "isFave": true
+    "character": "Re-l Mayer",
+    "series": "Ergo Proxy",
+    "emoji": "🖤",
+    "bgColor": "#f0f0f4",
+    "instagramUrl": "https://www.instagram.com/p/DevH5pKjSo2/",
+    "isFave": false,
+    "imageUrl": "/cosplays/rel-1.jpg",
+    "images": [
+      "/cosplays/rel-1.jpg",
+      "/cosplays/rel-2.jpg",
+      "/cosplays/rel-3.jpg",
+      "/cosplays/rel-4.jpg"
+    ]
   },
   {
     "id": "3",
-    "character": "Miku Nakano",
-    "series": "The Quintessential Quintuplets",
-    "emoji": "🎧",
-    "bgColor": "#f0f4ff",
-    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
-    "isFave": false
+    "character": "Draculaura",
+    "series": "Monster High",
+    "emoji": "🦇",
+    "bgColor": "#fdf0f8",
+    "instagramUrl": "https://www.instagram.com/p/DeSoPSwskdo/",
+    "isFave": true,
+    "imageUrl": "/cosplays/draculaura-1.jpg",
+    "images": [
+      "/cosplays/draculaura-1.jpg",
+      "/cosplays/draculaura-2.jpg"
+    ]
   },
   {
     "id": "4",
-    "character": "Tohru Honda",
-    "series": "Fruits Basket",
-    "emoji": "🍙",
-    "bgColor": "#f5fff0",
-    "instagramUrl": "https://www.instagram.com/cosplayer.kiyo/",
-    "isFave": false
+    "character": "Maomao",
+    "series": "The Apothecary Diaries",
+    "emoji": "🌿",
+    "bgColor": "#f0fbf4",
+    "instagramUrl": "https://www.instagram.com/p/DbMScIasy3r/",
+    "isFave": false,
+    "imageUrl": "/cosplays/maomao-1.webp"
+  },
+  {
+    "id": "5",
+    "character": "Sailor Moon Eternal",
+    "series": "Sailor Moon",
+    "emoji": "🌙",
+    "bgColor": "#fff0f8",
+    "instagramUrl": "https://www.instagram.com/p/DJ43k1Bh37n/",
+    "isFave": true,
+    "imageUrl": "/cosplays/sailor-1.jpg"
+  },
+  {
+    "id": "7",
+    "character": "Mitsuri Kanroji",
+    "series": "Demon Slayer",
+    "emoji": "🌸",
+    "bgColor": "#fff0f5",
+    "instagramUrl": "https://www.instagram.com/p/DAXY0PaNxx7/",
+    "isFave": false,
+    "imageUrl": "/cosplays/mitsuri-1.webp"
+  },
+  {
+    "id": "8",
+    "character": "Shinobu Kocho",
+    "series": "Demon Slayer",
+    "emoji": "🦋",
+    "bgColor": "#f0f0ff",
+    "instagramUrl": "https://www.instagram.com/p/C-WciCVNQH7/",
+    "isFave": false,
+    "imageUrl": "/cosplays/shinobu-1.png"
+  },
+  {
+    "id": "6",
+    "character": "Sailor Moon Eternal",
+    "series": "Sailor Moon (alt look)",
+    "emoji": "✨",
+    "bgColor": "#f8f0ff",
+    "instagramUrl": "https://www.instagram.com/p/DJ-vnDxNXvd/",
+    "isFave": false,
+    "imageUrl": "/cosplays/sailor-alt-1.webp"
   }
 ]

@@ -2,157 +2,106 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import type { DramaEntry } from '@/lib/types';
+import type { DramaResponse, DraamaShow } from '@/lib/types';
 import { SkeletonRow } from './SkeletonCard';
 
-interface DramaApiResponse {
-  watching: DramaEntry[];
-  completed?: DramaEntry[];
-  favorites?: DramaEntry[];
-  error?: string;
-  message?: string;
-}
-
 export default function ShowsSection() {
-  const [data, setData] = useState<DramaApiResponse | null>(null);
+  const [data, setData] = useState<DramaResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/dramalist')
       .then((r) => r.json())
-      .then((d: DramaApiResponse) => setData(d))
-      .catch(() =>
-        setData({
-          watching: [],
-          error: 'fetch_error',
-          message: 'Could not load drama list',
-        })
-      )
-      .finally(() => setLoading(false));
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => { setData({ error: 'fetch_error', watching: [], completed: [] }); setLoading(false); });
   }, []);
 
-  if (loading) {
+  function renderShowItem(show: DraamaShow) {
+    const isWatching = show.status === 'watching';
+    const epText = show.episodes
+      ? `ep ${show.watched_episodes} of ${show.episodes}`
+      : `${show.watched_episodes} eps`;
+
     return (
-      <div className="section">
-        <div className="sec-header">
-          <span className="sec-icon">🎬</span>
-          <h2>Drama &amp; Shows</h2>
+      <div key={show.id} className="m-item">
+        <div className="m-icon">
+          {show.image_url ? (
+            <Image
+              src={show.image_url}
+              alt={show.title}
+              fill
+              sizes="52px"
+              style={{ objectFit: 'cover' }}
+              unoptimized
+            />
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>🎬</div>
+          )}
         </div>
-        <div className="media-list">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <SkeletonRow key={i} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (data?.error) {
-    return (
-      <div className="section">
-        <div className="sec-header">
-          <span className="sec-icon">🎬</span>
-          <h2>Drama &amp; Shows</h2>
-        </div>
-        <div className="error-state">
-          <span className="error-state-icon">🎬</span>
-          <p className="error-state-text">
-            {data.message ?? 'Could not load drama list right now.'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const watching: DramaEntry[] = data?.watching ?? [];
-  const completed: DramaEntry[] = data?.completed ?? data?.favorites ?? [];
-
-  return (
-    <div className="section">
-      <div className="sec-header">
-        <span className="sec-icon">🎬</span>
-        <h2>Drama &amp; Shows</h2>
-      </div>
-
-      <div className="divider">currently watching</div>
-
-      {watching.length === 0 ? (
-        <div className="error-state">
-          <span className="error-state-icon">💤</span>
-          <p className="error-state-text">Nothing on the watch queue right now!</p>
-        </div>
-      ) : (
-        <div className="media-list">
-          {watching.map((drama, i) => (
-            <DramaRow key={drama.id || i} drama={drama} badge="b-now" badgeLabel="▶ watching" />
-          ))}
-        </div>
-      )}
-
-      <div className="divider">completed</div>
-
-      {completed.length === 0 ? (
-        <div className="error-state">
-          <span className="error-state-icon">⭐</span>
-          <p className="error-state-text">No completed shows listed yet!</p>
-        </div>
-      ) : (
-        <div className="media-list">
-          {completed.map((drama, i) => (
-            <DramaRow key={drama.id || i} drama={drama} badge="b-done" badgeLabel="✓ done" />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DramaRow({
-  drama,
-  badge,
-  badgeLabel,
-}: {
-  drama: DramaEntry;
-  badge: string;
-  badgeLabel: string;
-}) {
-  return (
-    <div className="m-item">
-      <div className="m-icon">
-        {drama.image_url ? (
-          <Image
-            src={drama.image_url}
-            alt={drama.title}
-            width={52}
-            height={72}
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-          />
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.4rem',
-            }}
-          >
-            🎬
+        <div className="m-text">
+          <div className="m-title">{show.title}</div>
+          <div className="m-sub">
+            {epText}
+            {show.score ? ` · ★ ${show.score}` : ''}
+            {show.country ? ` · ${show.country}` : ''}
+            {show.year ? ` · ${show.year}` : ''}
           </div>
-        )}
-      </div>
-      <div className="m-text">
-        <div className="m-title">{drama.title}</div>
-        <div className="m-sub">
-          {drama.episodes
-            ? `ep ${drama.watched_episodes} of ${drama.episodes}`
-            : `${drama.watched_episodes} eps watched`}
-          {drama.score ? ` · ★ ${drama.score}` : ''}
-          {drama.country ? ` · ${drama.country}` : ''}
         </div>
+        {isWatching
+          ? <span className="badge b-now">▶ watching</span>
+          : show.score && show.score >= 9
+            ? <span className="badge b-love">♡ love</span>
+            : <span className="badge b-done">✓ done</span>
+        }
       </div>
-      <span className={`badge ${badge}`}>{badgeLabel}</span>
-    </div>
+    );
+  }
+
+  return (
+    <section className="section">
+      <h2 className="sec-header">✦ Drama World</h2>
+      <p className="sec-sub">currently watching & completed shows from DramaList</p>
+
+      {loading && (
+        <div className="media-list">
+          {Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)}
+        </div>
+      )}
+
+      {!loading && data?.error && (
+        <p className="fallback-note">✦ {data.message ?? 'Showing sample data.'}</p>
+      )}
+
+      {!loading && data && (
+        <>
+          {data.watching.length > 0 && (
+            <>
+              <h3 style={{ fontFamily: 'Nunito', fontWeight: 700, fontSize: '0.95rem', color: 'var(--text2)', marginBottom: 12 }}>
+                Currently Watching
+              </h3>
+              <div className="media-list">
+                {data.watching.map(renderShowItem)}
+              </div>
+            </>
+          )}
+
+          {data.completed && data.completed.length > 0 && (
+            <>
+              <div className="divider">✦ completed ✦</div>
+              <div className="media-list">
+                {data.completed.map(renderShowItem)}
+              </div>
+            </>
+          )}
+
+          {data.watching.length === 0 && (!data.completed || data.completed.length === 0) && (
+            <div className="error-state">
+              <div className="error-icon">🎬</div>
+              <p className="error-msg">No shows found. The list might be private or empty.</p>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 }

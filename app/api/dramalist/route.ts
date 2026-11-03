@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import type { DramaEntry } from '@/lib/types';
 
 const MDL_USERNAME = 'ChinguKiyo';
 const MDL_URL = `https://mydramalist.com/dramalist/${MDL_USERNAME}`;
+
+function loadFallback(): { watching: DramaEntry[]; completed: DramaEntry[] } {
+  try {
+    const filePath = join(process.cwd(), 'public', 'dramas.json');
+    return JSON.parse(readFileSync(filePath, 'utf-8'));
+  } catch {
+    return { watching: [], completed: [] };
+  }
+}
 
 function parseNextData(html: string): { watching: DramaEntry[]; completed: DramaEntry[] } | null {
   try {
@@ -110,33 +121,38 @@ export async function GET() {
     });
 
     if (!res.ok) {
-      return NextResponse.json(
-        {
-          error: 'scrape_error',
-          message: `MDL returned ${res.status}`,
-          watching: [],
-          completed: [],
-        },
-        { status: 200 }
-      );
+      return NextResponse.json({
+        ...loadFallback(),
+        error: 'scrape_error',
+        message: `MDL returned ${res.status} — showing sample data. Edit public/dramas.json to customize.`,
+      });
     }
 
     const html = await res.text();
 
     // Try __NEXT_DATA__ first
     const nextDataResult = parseNextData(html);
-    if (nextDataResult) {
+    if (nextDataResult && (nextDataResult.watching.length || nextDataResult.completed.length)) {
       return NextResponse.json(nextDataResult);
     }
 
     // Fallback: parse HTML
     const htmlResult = parseHtml(html);
-    return NextResponse.json(htmlResult);
+    if (htmlResult.watching.length || htmlResult.completed.length) {
+      return NextResponse.json(htmlResult);
+    }
+
+    return NextResponse.json({
+      ...loadFallback(),
+      error: 'no_data',
+      message: 'Could not parse MDL list — showing sample data. Edit public/dramas.json to customize.',
+    });
   } catch (e) {
     console.error('[dramalist route]', e);
-    return NextResponse.json(
-      { error: 'fetch_error', message: 'Failed to scrape DramaList', watching: [], completed: [] },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      ...loadFallback(),
+      error: 'fetch_error',
+      message: 'Failed to reach DramaList — showing sample data. Edit public/dramas.json to customize.',
+    });
   }
 }

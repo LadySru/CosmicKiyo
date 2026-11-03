@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_PUBLIC_MAL_USERNAME = "KiyoDreams"
+  NEXT_PUBLIC_MDL_USERNAME = "ChinguKiyo"
+  NEXT_PUBLIC_IG_USERNAME = "cosplayer.kiyo"
+  NEXT_PUBLIC_STEAM_ID = "76561198199646829"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
